@@ -1,0 +1,15 @@
+.hero {
+  padding: 40px;
+  text-align: center;
+  background: #f0f4f8;
+  border-radius: 10px;
+  margin: 50px auto;
+  max-width: 600px;
+}
+.hero h2 {
+  font-size: 2rem;
+  color: #333;
+}
+.hero p {
+  margin: 10px 0;
+}

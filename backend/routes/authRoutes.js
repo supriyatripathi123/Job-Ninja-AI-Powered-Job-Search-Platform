@@ -2,19 +2,38 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-
 const router = express.Router();
-const JWT_SECRET = 'yourSecretKey'; 
+const JWT_SECRET = 'yourSecretKey';
 
+const otpStore = {}; // simple in-memory store
 
+// Send OTP
+router.post('/send-otp', async (req, res) => {
+  const { email } = req.body;
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  otpStore[email] = otp;
+
+  // Simulate email sending (in real projects use nodemailer or email API)
+  console.log(`🔐 OTP for ${email}: ${otp}`);
+  res.status(200).json({ msg: 'OTP sent' });
+});
+
+// Register
 router.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, contact, otp } = req.body;
+
+  // Validate OTP
+  if (otpStore[email] !== otp) {
+    return res.status(400).json({ msg: 'Invalid or expired OTP' });
+  }
+
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ msg: 'User already exists' });
 
-    const newUser = new User({ name, email, password });
+    const newUser = new User({ name, email, password, contact });
     await newUser.save();
+    delete otpStore[email];
     res.status(201).json({ msg: 'User registered successfully' });
   } catch (err) {
     res.status(500).json({ msg: 'Server error', error: err.message });

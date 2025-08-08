@@ -1,14 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
     <header>
       <h1>JobNinja</h1>
       <nav>
-        <a href="#">Home</a>
-        <a href="#">Tools</a>
-        <a href="#">Resume AI</a>
-        <a href="#">Contact</a>
+        <Link to="/">Home</Link>
+        <Link to="/tools">Tools</Link>
+        <Link to="/resume-ai">Resume AI</Link>
+        <Link to="/contact">Contact</Link>
       </nav>
     </header>
   );
